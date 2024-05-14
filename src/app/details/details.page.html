@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" />
+      <ion-title class="ion-text-wrap">{{ movie()?.title }}</ion-title>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (movie(); as movie){
+  <ion-card class="">
+    <img
+      [src]="imageBaseUrl+'/w400'+movie.poster_path"
+      alt=""
+      class="object-cover w-full max-h-[600px]"
+    />
+
+    <ion-card-header>
+      <ion-card-title color="primary">{{ movie?.title }}</ion-card-title>
+      <ion-card-subtitle color="secondary"
+        >{{ movie.tagline }}
+      </ion-card-subtitle>
+      <ion-text color="warning">
+        @for (genre of movie.genres; track genre.id; let isLast = $last) {
+        <span>{{ genre.name }} {{ !isLast ? '· ' : '' }}</span>
+        }
+      </ion-text>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label color="light"> {{ movie.overview }} </ion-label>
+    </ion-card-content>
+  </ion-card>
+  }
+</ion-content>

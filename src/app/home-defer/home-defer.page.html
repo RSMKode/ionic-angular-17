@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title> Trending Movies </ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-searchbar
+      animated="true"
+      placeholder="Animated"
+      [debounce]="300"
+      (ionInput)="handleSearch($event)"
+    />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @defer(when !isLoading){
+  <ion-list>
+    @for (item of movies; track item.id) {
+    <ion-item button [routerLink]="['/details', item.id]">
+      <ion-thumbnail slot="start" class="[--border-radius:10px]">
+        <ion-img
+          [src]="imageBaseUrl+'/w92'+item.poster_path"
+          [alt]="item.title"
+        />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.release_date | date:'y' }}</p>
+      </ion-label>
+      <ion-badge slot="end">
+        {{ item.vote_average }}
+        <!-- <ion-icon name="star" /> -->
+      </ion-badge>
+    </ion-item>
+    } @empty { @if(!isLoading){
+    <ion-item>
+      <ion-label class="ion-text-center"> No Movies Found </ion-label>
+    </ion-item>
+    } }
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMoreMovies($event)" position="bottom">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more movies..."
+    ></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  } @placeholder {
+  <!-- El problema de esto es que no vuelve a recargarse el esqueleto si utilizas la barra de busqueda -->
+  <ion-list>
+    @for (item of dummyArray; track item) {
+    <ion-item>
+      <ion-thumbnail slot="start" class="[--border-radius:10px]">
+        <ion-skeleton-text />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated class="w-48"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated class="w-20"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+  } @error {
+  <ion-alert
+    header="Error"
+    [message]="error"
+    [buttons]="['Try Again']"
+    isOpen="true"
+  />
+  } @loading(minimum 0.5s) {
+  <div class="grid p-2 place-content-center h-1/2">
+    <ion-spinner />
+  </div>
+  }
+</ion-content>

@@ -3,6 +3,12 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths":{
+      "@env/*": ["src/environments/*"],
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"],
+      "@mocks/*": ["src/mocks/*"],
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
